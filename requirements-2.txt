@@ -1,0 +1,16 @@
+PySide2
+click==5.1
+crypto
+distorm3==3.4.4
+future
+importlib
+ipython
+numpy
+pycrypto
+pyserial
+pyusb==1.0.0
+scapy
+serial
+six==1.10.0
+tabulate==0.7.5
+tqdm
