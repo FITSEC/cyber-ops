@@ -120,6 +120,7 @@ ruby-dev
 shellter
 silenttrinity
 snapd
+dos2unix
 snort
 sox
 sqlite3

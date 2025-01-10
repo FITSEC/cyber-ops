@@ -9,7 +9,13 @@ Kourtnee Fernalld, TJ OConnor, Sneha Sudhakaran, Nasheen Nur. *Lightweight Symph
 ## Build Command
 
 ```bash
-docker build . --tag cyber-ops:latest
+docker build . --name cyber-ops
+```
+
+If you are having issues with building the Docker image while on Windows then add this command below any COPY command:
+
+```Dockerfile
+RUN dos2unix <COPY_filePath>
 ```
 
 ## Run Command

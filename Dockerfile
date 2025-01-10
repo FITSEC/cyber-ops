@@ -13,15 +13,16 @@ ENV TZ=America/New_York
 
 RUN apt-get clean -y && \
     apt-get update -qq -y && \
-    apt-get upgrade -qq -y 
+    apt-get upgrade -qq -y
+
+RUN apt-get install -qq -y nala
 
 # =========================================================
 # legacy architecture libraries 
 # =========================================================
 
 RUN dpkg --add-architecture i386 && \
-    apt-get update -y && \
-    apt-get -y install -o APT::Immediate-Configure=false \
+    nala install --update -y -o APT::Immediate-Configure=false \
        libc6-i386 \
        libstdc++6:i386 \
        libc6-dev-i386 \
@@ -31,10 +32,43 @@ RUN dpkg --add-architecture i386 && \
 # apt package installs
 # =========================================================
 
+RUN nala install -y \
+    clang \
+    cmake \
+    curl \
+    dos2unix \
+    g++ \
+    gcc \
+    gcc-12-plugin-dev \
+    gcc-multilib \
+    gdb-multiarch \
+    gdbserver \
+    git \
+    libcapstone-dev \
+    libedit-dev \
+    librtlsdr-dev \
+    libusb-1.0-0-dev \
+    locales \
+    make \
+    nasm \
+    pkg-config \
+    python2 \
+    python2-dev \
+    python3 \
+    python3-dev \
+    python3-pip \
+    ruby \
+    ruby-dev \
+    sudo \
+    virtualenv \
+    wget 
+
 COPY packages.txt /opt/packages.txt
 
-RUN xargs -a /opt/packages.txt apt-get install \
-    -qq -y --ignore-missing --fix-missing 
+# RUN xargs -a /opt/packages.txt apt-get install \
+#     -qq -y --ignore-missing --fix-missing 
+
+# ^^^ Now optional
 
 # =========================================================
 # pip3 package installs
@@ -187,10 +221,7 @@ ENV C_INCLUDE_PATH="/usr/local/bin/tigresspkg/4.0.10:${C_INCLUDE_PATH:-}"
 # =========================================================
 
 RUN cd /opt/ && git clone https://gitlab.com/akihe/radamsa.git && \
-    cd radamsa && make && sudo make install
-
-# RUN cd /opt && git clone https://github.com/pwndbg/pwndbg && \
-#     cd pwndbg && ./setup.sh --update
+    cd radamsa && make && make install
 
 RUN wget -O /opt/pwndbg_2024.08.29_amd64.deb https://github.com/pwndbg/pwndbg/releases/download/2024.08.29/pwndbg_2024.08.29_amd64.deb && \
     dpkg -i /opt/pwndbg_2024.08.29_amd64.deb && rm /opt/pwndbg_2024.08.29_amd64.deb
@@ -219,8 +250,8 @@ RUN cd /opt/ && \
 
 RUN dpkg --add-architecture armhf && \
     dpkg --add-architecture armel && \
-    apt-get -qq update -y && \
-    apt-get -qq -y install -o APT::Immediate-Configure=false \
+    nala update && \
+    apt-get install -qq -y -o APT::Immediate-Configure=false \
        gcc-aarch64-linux-gnu \
        gcc-arm-linux-gnueabi \
        gcc-arm-linux-gnueabihf \
@@ -233,7 +264,7 @@ RUN dpkg --add-architecture armhf && \
 
 RUN rm -rf /root/.cache/pip && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/lib/gems/2.*/cache/*
+    rm -rf /var/lib/gems/2.*/cache/* \
 
 RUN touch ~/.hushlogin
 
