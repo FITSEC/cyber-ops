@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cyber-ops:$(date +%s) && docker tag cyber-ops:$(date +%s) cyber-ops:latest
+      run: UNIXTIME=$(date +%s); docker build . --file Dockerfile --tag cyber-ops:$UNIXTIME && docker tag cyber-ops:$UNIXTIME cyber-ops:latest

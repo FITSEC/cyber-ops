@@ -6,6 +6,7 @@ FROM kalilinux/kali-rolling:latest AS base
 
 LABEL maintainer="TJ <tj@tjoconnor.org>"
 LABEL contributor="Louie <lorcinolo2020@my.fit.edu>"
+LABEL contributor="Marcus <mfeliciano2021@my.fit.edu>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/New_York
@@ -178,7 +179,8 @@ ENV PATH=$PATH:/opt/call_trace/build/
 COPY tigress_4.0.10-1_all.deb.zip /opt/.
 RUN cd /opt && unzip tigress_4.0.10-1_all.deb.zip && \
     dpkg -i tigress_4.0.10-1_all.deb
-ENV C_INCLUDE_PATH="/usr/local/bin/tigresspkg/4.0.10:$C_INCLUDE_PATH"  
+# ENV C_INCLUDE_PATH="/usr/local/bin/tigresspkg/4.0.10:$C_INCLUDE_PATH"  
+ENV C_INCLUDE_PATH="/usr/local/bin/tigresspkg/4.0.10:${C_INCLUDE_PATH:-}"
 
 # =========================================================
 # pwn tooling
@@ -187,8 +189,11 @@ ENV C_INCLUDE_PATH="/usr/local/bin/tigresspkg/4.0.10:$C_INCLUDE_PATH"
 RUN cd /opt/ && git clone https://gitlab.com/akihe/radamsa.git && \
     cd radamsa && make && sudo make install
 
-RUN cd /opt && git clone https://github.com/pwndbg/pwndbg && \
-    cd pwndbg && ./setup.sh 
+# RUN cd /opt && git clone https://github.com/pwndbg/pwndbg && \
+#     cd pwndbg && ./setup.sh --update
+
+RUN wget -O /opt/pwndbg_2024.08.29_amd64.deb https://github.com/pwndbg/pwndbg/releases/download/2024.08.29/pwndbg_2024.08.29_amd64.deb && \
+    dpkg -i /opt/pwndbg_2024.08.29_amd64.deb && rm /opt/pwndbg_2024.08.29_amd64.deb
 
 RUN cd /opt/ && \
     mkdir getsome && \
@@ -242,6 +247,7 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
 
 ENV LANG=en_US.UTF-8 
 ENV PWNDBG_NO_AUTOUPDATE=1
+ENV DISPLAY=host.docker.internal:0.0
 
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.1/zsh-in-docker.sh)" -- \
     -t crunch
@@ -249,10 +255,10 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 WORKDIR /root/workspace
 RUN cd /root/workspace
 RUN chsh -s /bin/zsh
-RUN echo "source /opt/venv/bin/activate" >> /root/.zshrc
-RUN echo "source /opt/venv/bin/activate" >> /root/.tmux.conf
-RUN echo "set-option -g default-shell /bin/zsh" > /root/.tmux.conf
+# RUN echo "source /opt/venv/bin/activate" >> /root/.zshrc
+# RUN echo "source /opt/venv/bin/activate" >> /root/.tmux.conf
+# RUN echo "set-option -g default-shell /bin/zsh" > /root/.tmux.conf
 
 RUN echo freedom-spr25 > /opt/version
 
-ENTRYPOINT ["/bin/tmux"]
+ENTRYPOINT ["/bin/zsh"]
