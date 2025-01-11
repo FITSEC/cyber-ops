@@ -9,7 +9,7 @@ Kourtnee Fernalld, TJ OConnor, Sneha Sudhakaran, Nasheen Nur. *Lightweight Symph
 ## Build Command
 
 ```bash
-docker build . --name cyber-ops
+UNIXTIME=$(date +%s); docker build . --tag mfeliciano2021/cyber-ops:$UNIXTIME && docker tag mfeliciano2021/cyber-ops:$UNIXTIME mfeliciano2021/cyber-ops:latest
 ```
 
 If you are having issues with building the Docker image while on Windows then add this command below any COPY command:

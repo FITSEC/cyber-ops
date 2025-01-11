@@ -37,7 +37,6 @@ g++
 gcc
 gcc-12-plugin-dev
 gcc-multilib
-gdb
 gdb-multiarch
 gdbserver
 ghidra
@@ -79,12 +78,7 @@ libusb-1.0-0-dev
 locales
 ltrace
 make
-man
 man-db
-manpages
-manpages-dev
-manpages-posix
-manpages-posix-dev
 mitmproxy
 nano
 nasm
@@ -106,7 +100,6 @@ python3-cipheydists
 python3-dev
 python3-pip
 qemu-system-common
-qemu-system-mipsel
 qemu-system-misc
 qemu-system-sparc
 qemu-system-x86
